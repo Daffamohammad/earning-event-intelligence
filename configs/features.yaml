@@ -1,0 +1,23 @@
+# Feature toggles. Text features are OFF by default (ADR-002).
+structured:
+  earnings_surprise: true
+  fundamentals: true
+  market_context: true
+  cross_sectional: true
+
+text:
+  enabled: false
+  dictionary_tone: true
+  tfidf: true
+  embedding: false
+
+# Rolling normalization windows (sessions)
+rolling_windows:
+  momentum_short: 21
+  momentum_mid: 63
+  momentum_long: 126
+  volatility: 63
+  volume_surprise: 63
+
+# Point-in-time gates (relative to entry session open). All strictly less than cutoff.
+feature_available_buffer_minutes: 0  # 0 => must be strictly before order_submission_cutoff

@@ -1,0 +1,13 @@
+# Expanding-window walk-forward. Train grows; val/test roll forward one year at a time.
+type: expanding
+initial_train_start: "2015-01-01"
+initial_train_end: "2018-12-31"
+initial_val_start: "2019-01-01"
+initial_val_end: "2019-12-31"
+first_test_start: "2020-01-01"
+last_test_end: "2025-12-31"
+fold_step_years: 1
+random_seed: 20240117
+
+# Hard guard: forbid shuffling inside the evaluation module.
+forbid_shuffle_split: true

@@ -1,0 +1,62 @@
+ticker,company_name,announcement_timestamp,timing_class,expected_effective_date,fiscal_year,fiscal_quarter,notes
+AAPL,Apple Inc,2020-01-28 21:05:00,after_market_close,2020-01-29,2020,Q1,8-K filed post-market Jan 28 2020
+AAPL,Apple Inc,2020-04-30 21:05:00,after_market_close,2020-05-01,2020,Q2,Pandemic quarter; AMC Apr 30
+AAPL,Apple Inc,2020-07-30 21:05:00,after_market_close,2020-07-31,2020,Q3,Q3 FY2020 AMC
+AAPL,Apple Inc,2020-10-29 21:05:00,after_market_close,2020-10-30,2020,Q4,Q4 FY2020 AMC
+AAPL,Apple Inc,2021-01-27 21:05:00,after_market_close,2021-01-28,2021,Q1,Q1 FY2021 AMC
+AAPL,Apple Inc,2021-04-28 21:05:00,after_market_close,2021-04-29,2021,Q2,AMC
+AAPL,Apple Inc,2021-07-27 21:05:00,after_market_close,2021-07-28,2021,Q3,AMC
+AAPL,Apple Inc,2021-10-28 21:05:00,after_market_close,2021-10-29,2021,Q4,AMC
+MSFT,Microsoft,2020-01-29 21:05:00,after_market_close,2020-01-30,2020,Q2,FY20 Q2 AMC
+MSFT,Microsoft,2020-04-29 21:05:00,after_market_close,2020-04-30,2020,Q3,FY20 Q3 AMC
+MSFT,Microsoft,2020-07-22 21:05:00,after_market_close,2020-07-23,2020,Q4,FY20 Q4 AMC
+MSFT,Microsoft,2020-10-27 21:05:00,after_market_close,2020-10-28,2021,Q1,FY21 Q1 AMC
+MSFT,Microsoft,2021-01-26 21:05:00,after_market_close,2021-01-27,2021,Q2,FY21 Q2 AMC
+MSFT,Microsoft,2021-04-27 21:05:00,after_market_close,2021-04-28,2021,Q3,FY21 Q3 AMC
+MSFT,Microsoft,2021-07-27 21:05:00,after_market_close,2021-07-28,2021,Q4,FY21 Q4 AMC
+MSFT,Microsoft,2021-10-26 21:05:00,after_market_close,2021-10-27,2022,Q1,FY22 Q1 AMC
+GOOGL,Alphabet,2020-02-03 21:05:00,after_market_close,2020-02-04,2019,Q4,Q4 2019 AMC
+GOOGL,Alphabet,2020-04-28 21:05:00,after_market_close,2020-04-29,2020,Q1,Q1 2020 AMC
+GOOGL,Alphabet,2020-07-30 21:05:00,after_market_close,2020-07-31,2020,Q2,Q2 2020 AMC
+GOOGL,Alphabet,2020-10-29 21:05:00,after_market_close,2020-10-30,2020,Q3,Q3 2020 AMC
+GOOGL,Alphabet,2021-02-02 21:05:00,after_market_close,2021-02-03,2020,Q4,Q4 2020 AMC
+AMZN,Amazon,2020-01-30 21:05:00,after_market_close,2020-01-31,2019,Q4,Q4 2019 AMC
+AMZN,Amazon,2020-04-30 21:05:00,after_market_close,2020-05-01,2020,Q1,Q1 2020 AMC
+AMZN,Amazon,2020-07-30 21:05:00,after_market_close,2020-07-31,2020,Q2,Q2 2020 AMC
+AMZN,Amazon,2020-10-30 21:05:00,after_market_close,2020-11-02,2020,Q3,Oct 30 2020 was Friday; next session Mon Nov 2
+AMZN,Amazon,2021-02-02 21:05:00,after_market_close,2021-02-03,2020,Q4,Q4 2020 AMC
+META,Meta Platforms,2020-01-29 21:05:00,after_market_close,2020-01-30,2019,Q4,Q4 2019 AMC (was FB)
+META,Meta Platforms,2020-04-29 21:05:00,after_market_close,2020-04-30,2020,Q1,Q1 2020 AMC
+META,Meta Platforms,2020-07-30 21:05:00,after_market_close,2020-07-31,2020,Q2,Q2 2020 AMC
+META,Meta Platforms,2020-10-29 21:05:00,after_market_close,2020-10-30,2020,Q3,Q3 2020 AMC
+META,Meta Platforms,2021-01-27 21:05:00,after_market_close,2021-01-28,2020,Q4,Q4 2020 AMC
+JPM,JPMorgan Chase,2020-01-14 12:00:00,before_market_open,2020-01-14,2020,Q4,Q4 2019 BMO release
+JPM,JPMorgan Chase,2020-04-14 12:00:00,before_market_open,2020-04-14,2020,Q1,Q1 2020 BMO
+JPM,JPMorgan Chase,2020-07-14 12:00:00,before_market_open,2020-07-14,2020,Q2,Q2 2020 BMO
+JPM,JPMorgan Chase,2020-10-13 12:00:00,before_market_open,2020-10-13,2020,Q3,Q3 2020 BMO
+JPM,JPMorgan Chase,2021-01-15 12:00:00,before_market_open,2021-01-15,2020,Q4,Q4 2020 BMO
+JNJ,J&J,2020-01-22 11:00:00,before_market_open,2020-01-22,2019,Q4,Q4 2019 BMO
+JNJ,J&J,2020-04-14 11:00:00,before_market_open,2020-04-14,2020,Q1,Q1 2020 BMO
+JNJ,J&J,2020-07-16 11:00:00,before_market_open,2020-07-16,2020,Q2,Q2 2020 BMO
+JNJ,J&J,2020-10-13 11:00:00,before_market_open,2020-10-13,2020,Q3,Q3 2020 BMO
+JNJ,J&J,2021-01-26 11:00:00,before_market_open,2021-01-26,2020,Q4,Q4 2020 BMO
+PG,P&G,2020-01-23 11:00:00,before_market_open,2020-01-23,2020,Q2,FY20 Q2 BMO
+PG,P&G,2020-04-17 11:00:00,before_market_open,2020-04-17,2020,Q3,FY20 Q3 BMO
+PG,P&G,2020-07-30 11:00:00,before_market_open,2020-07-30,2020,Q4,FY20 Q4 BMO
+PG,P&G,2020-10-20 11:00:00,before_market_open,2020-10-20,2021,Q1,FY21 Q1 BMO
+PG,P&G,2021-01-21 11:00:00,before_market_open,2021-01-21,2021,Q2,FY21 Q2 BMO
+KO,Coca-Cola,2020-02-05 11:00:00,before_market_open,2020-02-05,2019,Q4,Q4 2019 BMO
+KO,Coca-Cola,2020-04-21 11:00:00,before_market_open,2020-04-21,2020,Q1,Q1 2020 BMO
+KO,Coca-Cola,2020-07-21 11:00:00,before_market_open,2020-07-21,2020,Q2,Q2 2020 BMO
+KO,Coca-Cola,2020-10-20 11:00:00,before_market_open,2020-10-20,2020,Q3,Q3 2020 BMO
+KO,Coca-Cola,2021-02-09 11:00:00,before_market_open,2021-02-09,2020,Q4,Q4 2020 BMO
+WMT,Walmart,2020-02-18 12:00:00,before_market_open,2020-02-18,2020,Q4,FY20 Q4 BMO
+WMT,Walmart,2020-05-19 12:00:00,before_market_open,2020-05-19,2021,Q1,FY21 Q1 BMO
+WMT,Walmart,2020-08-18 12:00:00,before_market_open,2020-08-18,2021,Q2,FY21 Q2 BMO
+WMT,Walmart,2020-11-17 12:00:00,before_market_open,2020-11-17,2021,Q3,FY21 Q3 BMO
+WMT,Walmart,2021-02-18 12:00:00,before_market_open,2021-02-18,2021,Q4,FY21 Q4 BMO
+GE,General Electric,2020-01-22 11:00:00,before_market_open,2020-01-22,2020,Q4,Q4 2019 BMO
+GE,General Electric,2020-04-01 11:00:00,before_market_open,2020-04-01,2020,Q1,Q1 2020 BMO
+GE,General Electric,2020-07-29 11:00:00,before_market_open,2020-07-29,2020,Q2,Q2 2020 BMO
+GE,General Electric,2020-10-28 11:00:00,before_market_open,2020-10-28,2020,Q3,Q3 2020 BMO
+GE,General Electric,2021-01-26 11:00:00,before_market_open,2021-01-26,2020,Q4,Q4 2020 BMO

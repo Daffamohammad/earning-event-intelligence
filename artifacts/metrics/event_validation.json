@@ -1,0 +1,18 @@
+{
+  "alignment_failures": 0,
+  "exclusion_breakdown": {
+    "primary": 3692,
+    "timing_class=intraday excluded from primary": 434,
+    "timing_class=unknown excluded from primary": 221
+  },
+  "golden": {
+    "duplicate_rate": 0.0,
+    "effective_date_accuracy": 1.0,
+    "failures": [],
+    "n": 61,
+    "status": "ok",
+    "timing_class_valid_rate": 1.0
+  },
+  "n_events": 4347,
+  "n_primary": 3692
+}

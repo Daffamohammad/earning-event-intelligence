@@ -1,0 +1,2 @@
+[console_scripts]
+earnings-ml = earnings_ml.cli:cli

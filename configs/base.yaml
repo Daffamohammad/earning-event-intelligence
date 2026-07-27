@@ -1,0 +1,43 @@
+provider: mock
+seed: 20240117
+log_level: INFO
+artifacts_dir: artifacts
+data_dir: artifacts/data
+tz: America/New_York
+order_submission_cutoff_et: "09:25"
+prediction_timestamp_et: "09:35"
+annualization: 252
+
+universe:
+  n_stocks: 100
+  start_date: "2015-01-01"
+  end_date: "2025-12-31"
+
+calendar:
+  exchange: XNYS
+
+paths:
+  events_parquet: artifacts/data/events.parquet
+  prices_parquet: artifacts/data/prices.parquet
+  estimates_parquet: artifacts/data/estimates.parquet
+  filings_parquet: artifacts/data/filings.parquet
+  features_parquet: artifacts/data/features.parquet
+  labels_parquet: artifacts/data/labels.parquet
+  golden_csv: golden/golden_events.csv
+  metrics_dir: artifacts/metrics
+  predictions_dir: artifacts/predictions
+  models_dir: artifacts/models
+  report_dir: artifacts/report
+  backtest_dir: artifacts/backtest
+
+# Synthetic signal planted into the mock provider (gamma). Set to 0.0 for negative control.
+signal:
+  gamma_base: 0.25          # baseline signal strength on reaction CAR
+  gamma_decay_per_year: 0.02 # signal decays over calendar time
+  drift_multiplier: 0.6      # fraction of reaction signal that persists into 20d drift
+  segment_multipliers:
+    small_cap: 1.3
+    mid_cap: 1.0
+    large_cap: 0.7
+    high_vol_regime: 1.2
+  noise_sd: 1.0

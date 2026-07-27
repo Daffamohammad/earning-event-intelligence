@@ -1,0 +1,19 @@
+reaction_horizon_sessions: 1
+drift_horizon_sessions: 20
+drift_sensitivity_horizons: [5, 60]
+volatility_horizon_sessions: 20
+benchmark_ticker: SPY
+# Sector ETFs per GICS sector (used as sector-benchmark for abnormal returns)
+sector_etfs:
+  Information Technology: XLK
+  Health Care: XLV
+  Financials: XLF
+  Consumer Discretionary: XLY
+  Communication Services: XLC
+  Industrials: XLI
+  Consumer Staples: XLP
+  Energy: XLE
+  Utilities: XLU
+  Materials: XLB
+  Real Estate: XLRE
+winsorize_pcts: [0.5, 99.5]

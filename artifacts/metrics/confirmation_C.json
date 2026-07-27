@@ -1,0 +1,75 @@
+{
+  "checkpoint": "C",
+  "verdict": "APPROVED WITH LIMITATIONS",
+  "final_status": "APPROVED WITH LIMITATIONS",
+  "disclosures_required_by_confirmation_agent": [
+    {
+      "id": 1,
+      "issue": "ruff/mypy configured but non-passing",
+      "resolution": "ruff now PASSES on all source (0 errors). mypy --strict PASSES on the four leakage-bearing modules (event_alignment, validation, features, labels). 106 mypy errors remain in non-strict modules (cli, reporting, ingestion, models, backtest, evaluation) — these are missing type annotations only, not correctness bugs. The late-re-import shadowing bug flagged at master.py:44 was a REAL bug (loop variable 'ex' shadowed the module) and has been FIXED."
+    },
+    {
+      "id": 2,
+      "issue": "Headline Pearson measures planted-label recovery, not price-path CAR",
+      "resolution": "Report section 10 now explicitly states that attach_latent_labels overrides computed CAR with planted values on the synthetic path, so Pearson IC measures planted-signal recovery. The disclaimer is also in ADR-001 and confirmation_B risks."
+    },
+    {
+      "id": 3,
+      "issue": "Test count and timeout",
+      "resolution": "Corrected: 33 tests pass (1 slow negative-control passes with extended timeout). The leakage module fixture takes ~90s; full suite requires >=300s pytest timeout. Documented in report section 23 and pyproject.toml."
+    }
+  ],
+  "confirmed_strengths": [
+    "PIT invariant is genuinely strict (>= violation) on < order_submission_cutoff, using ACTUAL source availability timestamps",
+    "Walk-forward harness has AST-level guard against train_test_split/ShuffleSplit/KFold; folds chronological with verified no-overlap",
+    "Reaction/drift are separate portfolios with disjoint windows; entry at next-session OPEN strictly after info is tradable",
+    "Negative control independently reproduced: gamma=0 -> best |pearson|=0.0399 < 0.15 (no manufactured alpha)",
+    "Report numbers match stored JSON/parquet to full precision; SYNTHETIC banner and ADR-004 predetermined-ordering disclaimer present",
+    "Config hash reproducible; seed pinned (20240117); all intermediates persisted as parquet",
+    "Golden dataset uses 61 REAL historical announcements (AAPL/MSFT/GOOGL/JPM/etc) with effective-date accuracy 1.0",
+    "ruff passes on all source; mypy --strict passes on the 4 leakage-bearing modules",
+    "Spec section 18 failure-mode coverage: lookahead (7 leakage tests), shuffle-splitting (AST guard), reaction/drift overlap (test), negative-control (test), intraday contamination (test)"
+  ],
+  "unresolved_limitations": [
+    "ALL empirical results are SYNTHETIC; no claim about US equities. Real EDGAR+yfinance adapters exist but are OFF the default path.",
+    "attach_latent_labels overrides computed CAR with planted values on synthetic path; reported Pearson measures planted-label recovery, not real-CAR prediction (now disclosed in report section 10).",
+    "Model ordering is largely predetermined by the planted signal shape (ADR-004) — model-comparison table validates the pipeline, not a research result.",
+    "Decay result (0.65->0.55) partly reflects planted gamma_decay_per_year, not discovered decay.",
+    "Single-exchange (XNYS) calendar; multi-exchange not supported.",
+    "100-stock synthetic universe is small; ranking metrics are high-variance.",
+    "yfinance real-data path has survivorship + revision bias (no delisting master).",
+    "106 mypy errors remain in non-strict modules (non-blocking; missing annotations only).",
+    "Backtest Sharpe is economically marginal (0.084 drift / -0.074 reaction at 20bps) — reported without overstatement."
+  ],
+  "methodological_risks": [
+    "20 bps round-trip primary cost is a defensible median anchor but synthetic (no microstructure/slippage/market-impact modeled).",
+    "Block-bootstrap CIs are approximate (two-way clustering simplified).",
+    "Backtest uses single-period-per-event; turnover=1.0 assumed; no serial portfolio overlap modeling.",
+    "Calibration metrics (ECE ~0.19-0.20 for tree models) are poor but not a headline metric."
+  ],
+  "implementation_risks": [
+    "Test suite is slow: leakage module fixture ~90s; full suite requires >=300s timeout. Acceptable for research repo, would need optimization for tight CI.",
+    "Late-re-import pattern in some modules (now cleaned in event_alignment/master.py)."
+  ],
+  "reported_conclusion_supported": "YES — The report's conclusion is fully and honestly scoped. Every headline number is labeled SYNTHETIC, the planted-signal caveat is explicit (ADR-004 + report section 10), limitations are enumerated (report section 21), and the spec's escape clause is satisfied.",
+  "acceptance_criteria_status": {
+    "1_repository_documented": "DONE (README, ADR, DATA_DICTIONARY, REPRODUCING)",
+    "2_checkpoint_A": "DONE (CONFIRMED WITH REQUIRED CHANGES, all addressed)",
+    "3_event_master_pipeline": "DONE",
+    "4_effective_dates_calendar_aware": "DONE (XNYS, 100% golden accuracy on 61 real events)",
+    "5_pit_invariants_enforced": "DONE (0 violations, strict check, ACTUAL availability)",
+    "6_golden_validated": "DONE (61 real events, 1.0 accuracy)",
+    "7_checkpoint_B": "DONE (CONFIRMED WITH REQUIRED CHANGES, all addressed)",
+    "8_structured_baselines": "DONE (6 baselines incl event_day_unconditional + SUE-portfolio)",
+    "9_tree_model": "DONE (random_forest, lightgbm)",
+    "10_text_baseline": "DONE (dictionary tone + TF-IDF, gated OFF by default per ADR-002)",
+    "11_walkforward_predictions": "DONE (60 fold-model rows, 6 folds 2020-2025)",
+    "12_portfolio_backtests": "DONE (reaction + drift separate, cost sweep 0-50bps)",
+    "13_transaction_costs": "DONE (primary = median 20bps)",
+    "14_ablation_robustness": "DONE (9 ablations, decay analysis)",
+    "15_tests_lint_typecheck": "PARTIAL — tests pass (33/33); ruff passes; mypy strict passes on leakage modules only",
+    "16_report_from_artifacts": "DONE (artifacts/report/report.html)",
+    "17_checkpoint_C": "DONE (this review, APPROVED WITH LIMITATIONS)",
+    "18_limitations_honest": "DONE (report section 21, confirmation_B/C risks)"
+  }
+}

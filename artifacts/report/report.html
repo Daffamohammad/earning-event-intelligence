@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Earnings-Event Intelligence — Research Report</title>
+<style>
+  body { font-family: -apple-system, Helvetica, Arial, sans-serif; max-width: 980px; margin: 2em auto; padding: 0 1em; color: #1a1a1a; }
+  h1, h2, h3 { color: #003a70; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.92em; }
+  th, td { border: 1px solid #ccc; padding: 6px 9px; text-align: right; }
+  th { background: #f0f4f8; font-weight: 600; }
+  td.l { text-align: left; }
+  .banner { background: #fff3cd; border: 1px solid #ffe08a; padding: 10px 14px; border-radius: 4px; margin: 1em 0; font-size: 0.94em; }
+  .ok { color: #1a7d1a; } .warn { color: #b35900; } .bad { color: #b30000; }
+  code { background: #f4f4f4; padding: 1px 4px; border-radius: 3px; font-size: 0.92em; }
+  .section { margin-top: 2em; }
+  ul { line-height: 1.5; }
+</style></head>
+<body>
+<h1>Earnings-Event Intelligence &amp; Post-Announcement Return Model</h1>
+<p>Research report generated from stored artifacts. Config hash: <code>02c5b41eb3b1be58</code>.</p>
+
+<div class="banner">
+  <strong>SYNTHETIC DATA.</strong> All empirical numbers below come from the deterministic
+  MockProvider. They validate the <em>pipeline and methodology</em>; they are
+  <strong>not</strong> claims about US equity markets. See docs/ADR.md ADR-001.
+</div>
+
+
+<div class="section">
+<h2>1. Executive summary</h2>
+<p>This framework evaluates whether earnings information can predict the immediate post-announcement reaction, post-earnings drift, and post-event volatility. Because no paid point-in-time data source is available, the default pipeline runs on a deterministic synthetic provider with a planted, decaying, segment-dependent signal. The reported numbers validate the pipeline and methodology, not empirical market behavior.</p>
+</div>
+
+<div class="section">
+<h2>2. Research questions</h2>
+<ul>
+<li>Can earnings info predict immediate market reaction?</li>
+<li>Is there post-earnings announcement drift (PEAD)?</li>
+<li>Does text add value beyond structured features?</li>
+<li>Does any edge survive transaction costs?</li>
+<li>Where (segment / regime / cap) does the model perform?</li>
+<li>Is performance stable across walk-forward folds?</li>
+<li>Does the signal decay over calendar time?</li>
+<li>Are predictions calibrated?</li>
+<li>Is the strategy robust enough for further research or deployment?</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>3. Dataset description</h2>
+<p>Provider: mock. Universe: 100 stocks. Period: 2015-01-01–2025-12-31. Frequency: quarterly earnings events and daily market data.</p>
+
+<table>
+<tr><th class="l">Field</th><th>Value</th></tr>
+<tr><td class="l">provider</td><td>mock</td></tr>
+<tr><td class="l">is_synthetic</td><td>True</td></tr>
+<tr><td class="l">n_events</td><td>4347</td></tr>
+<tr><td class="l">n_prices</td><td>416700</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>4. Event-alignment &amp; 5. Point-in-time controls</h2>
+<p>Effective dates are computed via the XNYS exchange calendar only (no calendar-day arithmetic).
+Rules: BMO → same session; AMC → next session; weekend/holiday → next session; intraday/unknown → excluded from primary.</p>
+<p>Prediction timestamp = effective_trading_date 09:35 ET. Order-submission cutoff = 09:25 ET.
+Every feature row satisfies <code>feature_available_at &lt; order_submission_cutoff</code> (strict).</p>
+
+<table>
+<tr><th class="l">Check</th><th>Value</th></tr>
+<tr><td class="l">n_events</td><td>4347</td></tr>
+<tr><td class="l">n_primary</td><td>3692</td></tr>
+<tr><td class="l">alignment failures</td><td>0</td></tr>
+<tr><td class="l">golden effective-date accuracy</td><td>1.0000</td></tr>
+<tr><td class="l">PIT feature-availability violations</td><td>0</td></tr>
+</table>
+<h3>Exclusion breakdown</h3>
+<table><tr><th class="l">Reason</th><th>Count</th></tr>
+
+<tr><td class="l">primary</td><td>3692</td></tr>
+
+<tr><td class="l">timing_class=intraday excluded from primary</td><td>434</td></tr>
+
+<tr><td class="l">timing_class=unknown excluded from primary</td><td>221</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>6. Data-quality findings</h2>
+<p>Golden set: 61 real historical announcements.
+Effective-date accuracy: 1.0000.
+PIT violations: 0 (must be 0).</p>
+</div>
+
+<div class="section">
+<h2>10. Baseline &amp; structured model results</h2>
+<p><em>Important interpretation:</em> on the synthetic path, the <code>attach_latent_labels</code> step
+overrides the computed price-path CAR with the provider's <em>planted</em> label
+(<code>latent_reaction_car</code>). The Pearson IC values below therefore measure the model's ability
+to <strong>recover the planted signal</strong>, not to predict real price-path CAR. This is documented
+in <code>artifacts/metrics/confirmation_B.json</code> and is an inherent property of validating on
+synthetic data with a known planted signal.</p>
+
+<table>
+<tr><th class="l">Model</th><th>n</th><th>MAE</th><th>Pearson</th><th>Pearson CI low</th><th>Pearson CI high</th><th>Top−Bot</th><th>ROC-AUC</th><th>ECE</th></tr>
+
+<tr><td class="l">elastic_net</td><td>2074</td><td>0.0049863</td>
+<td>-0.0074</td>
+<td>-0.0351</td>
+<td>0.0270</td>
+<td>1.1526e-05</td>
+<td>0.5127</td>
+<td>0.0183</td>
+</tr>
+<tr><td class="l">event_day_unconditional</td><td>2074</td><td>0.0049863</td>
+<td>-0.0074</td>
+<td>-0.0351</td>
+<td>0.0270</td>
+<td>1.1526e-05</td>
+<td>0.5127</td>
+<td>0.0183</td>
+</tr>
+<tr><td class="l">lightgbm</td><td>2074</td><td>0.0042014</td>
+<td>0.5723</td>
+<td>0.5494</td>
+<td>0.6042</td>
+<td>0.010146</td>
+<td>0.7582</td>
+<td>0.1886</td>
+</tr>
+<tr><td class="l">linear</td><td>2074</td><td>0.0040975</td>
+<td>0.5860</td>
+<td>0.5607</td>
+<td>0.6151</td>
+<td>0.01007</td>
+<td>0.7686</td>
+<td>0.1992</td>
+</tr>
+<tr><td class="l">prior_reaction</td><td>2074</td><td>0.047632</td>
+<td>0.0046</td>
+<td>-0.0318</td>
+<td>0.0414</td>
+<td>0.00029366</td>
+<td>0.5031</td>
+<td>0.0157</td>
+</tr>
+<tr><td class="l">random_forest</td><td>2074</td><td>0.0040711</td>
+<td>0.5948</td>
+<td>0.5696</td>
+<td>0.6277</td>
+<td>0.010242</td>
+<td>0.7711</td>
+<td>0.2026</td>
+</tr>
+<tr><td class="l">sector_relative_surprise</td><td>2074</td><td>0.044379</td>
+<td>0.5886</td>
+<td>0.5637</td>
+<td>0.6184</td>
+<td>0.0099296</td>
+<td>0.7684</td>
+<td>0.1844</td>
+</tr>
+<tr><td class="l">sign_of_surprise</td><td>2074</td><td>0.044138</td>
+<td>0.5913</td>
+<td>0.5663</td>
+<td>0.6215</td>
+<td>0.010076</td>
+<td>0.7708</td>
+<td>0.1864</td>
+</tr>
+<tr><td class="l">sue_decile</td><td>2074</td><td>0.43497</td>
+<td>0.5689</td>
+<td>0.5437</td>
+<td>0.6002</td>
+<td>0.009563</td>
+<td>0.7677</td>
+<td>0.1547</td>
+</tr>
+<tr><td class="l">unconditional_mean</td><td>2074</td><td>0.0049863</td>
+<td>-0.0074</td>
+<td>-0.0351</td>
+<td>0.0270</td>
+<td>1.1526e-05</td>
+<td>0.5127</td>
+<td>0.0183</td>
+</tr>
+</table>
+<p><em>Note:</em> the synthetic provider plants a decaying, segment-dependent signal, so the
+expected model ordering (LightGBM ≈ RF &gt; Linear ≈ ElasticNet &gt; baselines) is largely
+predetermined by the synthetic design. The point of this table is to confirm the pipeline
+distinguishes models; the ordering itself is not an empirical finding. See ADR-004.</p>
+
+</div>
+
+<div class="section">
+<h2>15. Economic backtest</h2>
+
+<h3>lightgbm / drift (primary cost = 20 bps RT)</h3>
+<table>
+<tr><th class="l">Cost (bps)</th><th>n_long</th><th>n_short</th><th>Long-only net</th><th>Long-short net</th></tr>
+
+<tr><td>0</td><td>417</td><td>418</td>
+<td>0.0062075</td><td>0.007231</td></tr>
+
+<tr><td>5</td><td>417</td><td>418</td>
+<td>0.0057075</td><td>0.006231</td></tr>
+
+<tr><td>10</td><td>417</td><td>418</td>
+<td>0.0052075</td><td>0.005231</td></tr>
+
+<tr><td>20</td><td>417</td><td>418</td>
+<td>0.0042075</td><td>0.003231</td></tr>
+
+<tr><td>30</td><td>417</td><td>418</td>
+<td>0.0032075</td><td>0.001231</td></tr>
+
+<tr><td>50</td><td>417</td><td>418</td>
+<td>0.0012075</td><td>-0.002769</td></tr>
+
+</table>
+
+<h3>lightgbm / reaction (primary cost = 20 bps RT)</h3>
+<table>
+<tr><th class="l">Cost (bps)</th><th>n_long</th><th>n_short</th><th>Long-only net</th><th>Long-short net</th></tr>
+
+<tr><td>0</td><td>417</td><td>418</td>
+<td>0.00091694</td><td>0.0010709</td></tr>
+
+<tr><td>5</td><td>417</td><td>418</td>
+<td>0.00041694</td><td>7.0938e-05</td></tr>
+
+<tr><td>10</td><td>417</td><td>418</td>
+<td>-8.3061e-05</td><td>-0.00092906</td></tr>
+
+<tr><td>20</td><td>417</td><td>418</td>
+<td>-0.0010831</td><td>-0.0029291</td></tr>
+
+<tr><td>30</td><td>417</td><td>418</td>
+<td>-0.0020831</td><td>-0.0049291</td></tr>
+
+<tr><td>50</td><td>417</td><td>418</td>
+<td>-0.0040831</td><td>-0.0089291</td></tr>
+
+</table>
+
+</div>
+
+<div class="section">
+<h2>21. Limitations</h2>
+<ul>
+<li><strong>Synthetic data only on the default path.</strong> No empirical claim about US equities.</li>
+<li>100-stock universe is small; ranking metrics are high-variance.</li>
+<li>yfinance real-data path has survivorship + revision bias (no delisting master available).</li>
+<li>The planted signal shape predetermines which model class wins.</li>
+<li>Block-bootstrap CIs are approximate (two-way clustering is simplified).</li>
+<li>The negative-control test exercises the model fit + evaluate path on near-zero planted labels
+(it does not re-stress the price-path label computation, which is covered by the leakage test suite).</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>22. Confirmation-agent review</h2>
+<p>Checkpoint A: <strong>CONFIRMED WITH REQUIRED CHANGES</strong> — all 7 critical changes addressed.</p>
+<p>Checkpoint B: see <code>artifacts/metrics/confirmation_B.json</code>.</p>
+<p>Checkpoint C: see <code>artifacts/metrics/confirmation_C.json</code>.</p>
+</div>
+
+<div class="section">
+<h2>23. Final conclusion</h2>
+<p>On synthetic data, the best model (random_forest) achieves a pooled Pearson IC of 0.595 for the primary target. Because the data is synthetic with a planted signal, this is NOT evidence of alpha in US equities. The pipeline, point-in-time controls, leakage tests, and walk-forward harness are the actual deliverable. Empirical conclusions require re-running with a paid PIT-correct data source.</p>
+<p><strong>Verification status:</strong> the verification status recorded at generation time lives in
+<code>artifacts/metrics/confirmation_C.json</code> (test suite, ruff, mypy). To verify the CURRENT tree,
+re-run <code>pytest</code>, <code>ruff check src/</code>, and <code>mypy</code> — this report does not
+assert their live results.</p>
+</div>
+
+<footer><hr><p>Generated by earnings-ml. Source: stored artifacts under <code>artifacts/</code>.</p></footer>
+</body></html>

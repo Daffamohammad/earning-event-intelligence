@@ -1,0 +1,13 @@
+costs_bps_round_trip: [0, 5, 10, 20, 30, 50]
+# Primary conclusion cost = the MEDIAN of the above (20 bps). Conservative anchor.
+primary_cost_bps: 20
+slippage_bps_per_pct_adv: 0.5
+max_position_weight: 0.10
+max_weight_per_adv: 0.01
+liquidity_filter_adv_usd: 5000000
+horizons: [reaction, drift]   # separate portfolios per horizon; never mixed
+n_quantiles: 5
+shorting:
+  enabled: true
+  reported_separately: true
+  borrow_cost_bps_annual: 50
