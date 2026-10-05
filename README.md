@@ -1,8 +1,6 @@
-# Earnings-Event Intelligence & Post-Announcement Return Model
+# Earnings-Event Intelligence: Post-Announcement Return & Volatility Research
 
-A reproducible research framework that evaluates whether earnings information can predict
-the immediate post-announcement stock-price reaction, post-earnings announcement drift
-(PEAD), and post-announcement realized volatility.
+A leakage-tested framework for evaluating post-announcement returns, post-earnings announcement drift (PEAD), and realized volatility.
 
 > **IMPORTANT — scope of empirical claims.**
 > This repository ships with a **deterministic synthetic data provider** as the default
